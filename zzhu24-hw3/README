@@ -1,0 +1,24 @@
+Here is a brief description of the contents of this directory
+
+- README: This file
+
+- python: All code of algorithm and experiment. It contains three files:
+   1. Perceptron.py: Perceptron without margin
+
+   2. Perceptron_Margin.py: Perceptron with margin
+
+   3. Winnow.py: Winnow without margin
+
+   4. Winnow_Margin.py: Winnow with margin
+
+   5. AdaGrad.py: AdaGrad Algorithm
+
+   6. Question1.py: experiment of question 1
+
+   7. Question2.py: experiment of question 2
+
+   8. Question3.py: experiment of question 3
+
+   9. Question1.py: experiment of question 1
+
+- hw3_report_zzhu24.pdf: Final report and analysis

@@ -1,0 +1,394 @@
+\input{../Hw/cs446.tex}
+\usepackage{graphicx,amsmath,amssymb,url,epstopdf}
+\usepackage{soul,xcolor}
+\usepackage{color}
+
+\sloppy
+\newcommand{\ignore}[1]{}
+\newcommand{\bx}{{\bf x}}
+\newcommand{\bw}{{\bf w}}
+
+\oddsidemargin 0in
+\evensidemargin 0in
+\textwidth 6.5in
+\topmargin -0.5in
+\textheight 9.0in
+
+\newcommand{\bb}[1]{{\bf #1}}
+\newcommand{\pp}{\noindent}
+\newcommand{\ov}{\overline}
+\renewcommand{\labelitemii}{\tiny$\circ$}
+
+\begin{document}
+
+\assignment{Spring 2017}{4}{February $27^{th}$, $2017$}{March $11^{th}$, $2017$}
+
+
+\begin{footnotesize}
+\begin{itemize}
+\item Feel free to talk to other members of the class in doing the homework.  I am
+more concerned that you learn how to solve the problem than that you
+demonstrate that you solved it entirely on your own.  You should, however,
+write down your solution yourself.  Please try to keep the solution brief and
+clear.
+
+\item Please use Piazza first if you have questions about the homework.
+  Also feel free to send us e-mails and come to office hours.
+
+\item Please, no handwritten solutions. \textcolor{red}{You will submit your solution manuscript as a single pdf file.}
+
+\item Please present your algorithms in both pseudocode and English.  That is, give
+a precise formulation of your algorithm as pseudocode and {\em also} explain
+in one or two concise paragraphs what your algorithm does.  Be aware that
+pseudocode is much simpler and more abstract than real code. 
+
+\item The homework is due at 11:59 PM on the due date. We will be using
+Compass for collecting the homework assignments. Please submit your solution manuscript as a pdf file via Compass
+(\texttt{http://compass2g.illinois.edu}). Please do NOT hand in a hard copy of your write-up.
+Contact the TAs if you are having technical difficulties in
+submitting the assignment.
+
+\item \textcolor{red}{You can only use 24 late submission credit hours for this problem set. We will release the solution 24 hours after it is due so that you can have time to go over it before the mid-term on Oct. 25th.}
+
+\end{itemize}
+\end{footnotesize}
+
+
+\begin{enumerate}
+\item \textbf{[PAC Learning - 35 points]}
+  In this problem, we are going to prove that the class of 
+  two concentric circles in the plane is PAC learnable. 
+  This hypothesis class is formally defined as 
+  $\mathcal{H}_{2cc} = \{h_{r_1,r_2}: 
+    r_1, r_2 \in \mathbb{R}_+ \text{ and } r_1<r_2\}$, where 
+  \[ h_r(x) = \begin{cases}1 & \text{if } r_1 \leq \|x\|_2 \leq r_2 \\
+                0 & \text{otherwise}
+  			\end{cases}  
+  \]
+For this problem, assume a sample of $m$ points is drawn I.I.D. 
+from some distribution $\mathcal{D}$ and that the labels are 
+provided from some target function $h^*_{r_1^*,r_2^*} \in \mathcal{H}_{2cc}$.
+
+\begin{enumerate}
+\item \textbf{[5 points]} Describe an algorithm that takes a training sample of m 
+points as described above and returns a hypothesis 
+$\hat{h}_{r_1,r_2} \in \mathcal{H}_{2cc}$ 
+that makes zero mistakes on the training sample. 
+To simplify the analysis that follows (in (b)), represent your 
+hypothesis as two circles with radii $r_1, r_2$ such that:
+$r_1^* \leq r_1 < r_2 \leq r_2*k$.
+
+\end{enumerate}
+
+Recall that PAC learning involves two primary parameters: 
+$\epsilon$ and $\delta$. $\epsilon$ is sometimes called 
+the \textit{accuracy parameter}; we say that if the true 
+error of a learner is larger than $\epsilon$, then the 
+learning has ``failed''. Our hope is to directly prove that we can 
+find some sample size $m$ such that the probability of 
+drawing a sample of size at least $m$ from $\mathcal{D}$ 
+which causes the learner to ``fail'' is less than $\delta$ 
+(which is sometimes called the $\textit{confidence parameter}$).
+
+\begin{enumerate}
+\setcounter{enumii}{1}
+\item 
+Given the hypothesis that you learned in (a) your hypothesis will only make 
+mistakes on positive examples (we ask that you justify that below).
+For this problem, $\epsilon$ is equal to the probability 
+of drawing a point $x$ from $\mathcal{D}$ 
+that is labeled as a positive example and lies in the area between 
+either  $r_1^* \leq |x| \leq r_1$ or $r_2 < \|x\|_2 \leq r_2^*$ 
+in other words,
+\[ \epsilon = 
+\Pr_{x \sim \mathcal{D}}[r_1^* < \|x\|_2 \leq r_1
+                          \text{ or } r_2 < \|x\|_2 \leq r_2^*]
+\]
+\begin{enumerate} 
+	\item \textbf{[5 points]} Explain why this is the case.
+	\item \textbf{[5 points]} What is the probability of drawing 
+          a sample of m points from $\mathcal{D}$ where none of the 
+          points lie in the areas 
+           $  r_1^* < \|x\|_2 \leq r_1 
+                          \text{ or } r_2 < \|x\|_2 \leq r_2^*$?
+\end{enumerate}
+
+\item \textbf{[15 points]} Given parameters $\delta$ and $\epsilon$, find value for $m$ such that the probability of drawing a sample of size at least $m$ that has true error larger than $\epsilon$ is less than $\delta$. 
+\begin{itemize} \item \textbf{Hint}: The following inequality might be useful: \[ 1-x \leq e^{-x} \]
+ \end{itemize}
+
+\item \textbf{[5 points]} We could have found a bound on $m$ using another method. 
+Derive this bound; how does it compare to the bound we found in the last step? 
+(\textbf{Hint}: what is the VC Dimension of $\mathcal{H}_{2cc}$?).
+  
+\end{enumerate}
+
+\item \textbf{[VC Dimension - 5 points]}
+%\subsection*{VC Dimension}
+We define a set of concepts
+$$H = \{sgn(ax^2 +bx+c); a, b, c,\in R\},$$
+where $sgn(\cdot)$ is $1$ when the argument $\cdot$ is positive, 
+and $0$ otherwise.
+\noindent
+What is the VC dimension of $H$? Prove your claim.
+
+{\bf Grading note:} You will not get any points without proper justification of your answer.
+
+\item \textbf{[Kernels - 15 points]}
+  \begin{enumerate}
+  \item {\bf [5 points]} Write down the dual representation of the
+    Perceptron algorithm.
+
+  \item {\bf [5 points]} Given two examples $\vec{\bb{x}} \in \mathbb{R}^2$ and
+    $\vec{\bb{z}} \in \mathbb{R}^2$, let
+    \begin{equation*}
+      K(\vec{\bb{x}},\vec{\bb{z}}) = (\vec{\bb{x}}^T\vec{\bb{z}})^3 
+                                      + 49(\vec{\bb{x}}^T\vec{\bb{z}} + 4)^2 
+                                      + 64 \vec{\bb{x}}^T\vec{\bb{z}}.
+    \end{equation*}
+    Prove that this is a valid kernel function.
+\end{enumerate}
+
+ \begin{enumerate}
+
+ \setcounter{enumii}{2}
+  \item \textbf{[5 points]} 
+We wish to learn a Boolean function represented 
+as a \textbf{monotone} DNF (DNF without negated variables) using kernel Perceptron. 
+For this problem, assume that the size of each term in the DNF
+is of size $k$, s.t. $k \leq n$, the size dimensionality of the input.
+In order to complete this task, we will first define a kernel that 
+maps an example $\bb{x} \in \{0, 1\}^n$ into a
+new space of monotone conjunctions of \textbf{exactly} $k$ different variables from the
+$n$-dimensional space. Then, we will use the kernel Perceptron to perform our
+learning task. \\
+\smallskip\\
+\indent Define a kernel $K(\bb{x}, \bb{z}) = \sum_{c \in C} c(\bb{x}) c(\bb{z})$,
+    where $C$ is a family of monotone conjunctions containing \textbf{exactly} $k$ different
+    variables, and $c(\bb{x}),c(\bb{z}) \in \{0, 1\}$ is the value of $c$ when evaluated
+    on example $\bb{x}$ and $\bb{z}$ separately. Show that $K(\bb{x},\bb{z})$ 
+    can be computed in time that is linear in $n$. 
+\end{enumerate}
+
+
+\item {\bf [SVM - 25 points]}
+
+\pp
+We have a set of six labeled examples $D$ in the two-dimensional space, $D = \{(\mathbf{x}^{(1)}, y^{(1)}),...,(\mathbf{x}^{(6)}, y^{(6)})\}$, $\mathbf{x}^{(i)} \in \mathbb{R}^{2}$ and $y^{(i)} \in \{1, -1\}, i=1,2,...,6$ listed as follows:
+  \begin{center}
+    \begin{tabular}{|c|c|c|c|}
+      \hline
+      {\em i}  & $\mathbf{x}_1^{(i)}$  & $\mathbf{x}_2^{(i)}$ & $y^{(i)}$ \\
+      \hline
+      {\em 1}  & $-2$  & $0$ & $1$ \\
+      \hline
+      {\em 2}  & $-2.4$  & $-1.6$ & $1$ \\
+      \hline
+      {\em 3}  & $1.3$  & $2.6$ & $-1$ \\
+      \hline
+      {\em 4}  & $-0.3$  & $-2.5$ & $1$ \\
+      \hline
+      {\em 5}  & $3$  & $0.2$ & $-1$ \\
+      \hline
+      {\em 6}  & $0$  & $2$ & $-1$ \\
+      \hline
+    \end{tabular}
+  \end{center}
+  \begin{figure}[h!]
+        \begin{center}
+         \hspace{5cm}
+          \includegraphics[width=0.99\textwidth]{svm_points.png}
+          \caption{Training examples for SVM in question 1.(a)}
+          \label{fig:1-500}
+        \end{center}
+      \end{figure}
+\begin{enumerate}
+% (a)
+\item[(a)][$4$ points]
+We want to find a linear classifier where examples $\mathbf{x}$ are positive if and only if $\mathbf{w}\cdot \mathbf{x} + \theta \geq 0$.
+
+\begin{enumerate}
+% 1.
+\item[1.][$1$ points] Find an easy solution $(\mathbf{w}, \theta)$ that can separate the positive and negative examples given.
+
+\vspace{.13in}
+Define $\mathbf{w}=$ $\underline{\qquad\qquad\qquad\qquad}$
+
+\vspace{.13in}
+Define $\theta =$ $\underline{\qquad\qquad\qquad\qquad}$
+\vspace{.13in}
+% 2.
+\item[2.][$4$ points] Recall the Hard SVM formulation:
+%\begin{equation}
+\begin{gather}
+\textbf{min}_{\mathbf{w}}\frac{1}{2}||\mathbf{w}||^2 \\
+\text{s.t  } y^{(i)}(\mathbf{w}\cdot\mathbf{x}^{(i)}+\theta)\geq 1, \forall (\mathbf{x}^{(i)},y^{(i)})\in D
+\end{gather}
+%\end{equation}
+
+What would the solution be if you solve this optimization problem? (Note: you don't actually need to solve the optimization problem; we expect you to use a simple geometric argument to derive the same solution SVM optimization would result in).
+
+\vspace{.13in}
+Define $\mathbf{w}=$ $\underline{\qquad\qquad\qquad\qquad}$
+
+\vspace{.13in}
+Define $\theta =$ $\underline{\qquad\qquad\qquad\qquad}$
+\vspace{.13in}
+
+\item[3.][$5$ points] Given your understanding of SVM optimization, how did you derive the SVM solution for the points in Figure 1?
+
+\vspace{.60in}
+
+\end{enumerate}
+
+% (b)
+\item[(b)][$15$ points]
+Recall the dual representation of SVM. There exists coefficients $\alpha_{i} > 0$ such that:
+\begin{eqnarray}
+\mathbf{w}^{*} = \sum_{i\in I}{\alpha_{i}y^{(i)}\mathbf{x}^{(i)}}
+\end{eqnarray}
+where $I$ is the set of indices of the support vectors.
+\begin{enumerate}
+
+% 1.
+\item[1.][$5$ points] Identify support vectors from the six examples given.
+
+\vspace{.2in}
+Define $I =$ $\underline{\qquad\qquad\qquad\qquad}$
+\vspace{.2in}
+
+
+% 2.
+\item[2.][$5$ points] For the support vectors you have identified, find $\alpha_i$ such that the dual representation of $\mathbf{w}^{*}$ is equal to the primal one you found in (a)-2.
+
+ \vspace{.2in}
+Define $\mathbf{\alpha} = \{\alpha_1, \alpha_2, ..., \alpha_{|I|}\} = $ $\underline{\qquad\qquad\qquad\qquad}$
+\vspace{.2in}
+
+ \vspace{.2in}
+
+\vspace{.2in}
+
+\item[3.][$5$ points] Compute the value of the hard SVM objective function for the optimal solution you found.
+
+
+ \vspace{.2in}
+\emph{Objective function value} =  $\underline{\qquad\qquad\qquad\qquad}$
+\vspace{.2in}
+\end{enumerate}
+
+% (c)
+\item[(c)][$10$ points] Recall the objective function for soft representation of SVM.
+\begin{gather}
+\textbf{min }   \frac{1}{2}||\mathbf{w}||^{2} + C\sum_{j=1}^{m}{\xi_{i}} \\
+\text{s.t  } y^{(i)}(\mathbf{w}\cdot\mathbf{x}^{(i)}+\theta)\geq 1 - \xi_{i}, \xi_i\geq0, \forall (\mathbf{x}^{(i)},y^{(i)})\in D
+\end{gather}
+
+where $m$ is the number of examples. Here $C$ is an important parameter. For which \textcolor{red}{trivial} value of $C$, the solution to this optimization problem gives the hyperplane that \textcolor{red}{you have found in (a)-2}? Comment on the impact on the margin and support vectors when we use $C = \infty$, $C = 1$, and $C = 0$.	Interpret what $C$ controls. 
+\vspace{.7in}
+
+\end{enumerate}
+
+\item {\bf [Boosting - 20 points]}
+  Consider the following examples $(x,y) \in \mathbb{R}^2$ ({\em i} is the example index):
+  \begin{center}
+    \begin{tabular}{|c|c|c|c|}
+      \hline
+      {\em i}  & $x$  & $y$ & Label \\
+      \hline
+      {\em 1}  & 0  & 8 & $-$ \\
+      \hline
+      {\em 2}  & 1  & 4 & $-$ \\
+      \hline
+      {\em 3}  & 3  & 7 & $+$ \\
+      \hline
+      {\em 4}  & -2  & 1 & $-$ \\
+      \hline
+      {\em 5}  & -1  & 13 & $-$ \\
+      \hline
+      {\em 6}  & 9  & 11 & $-$ \\
+      \hline
+      {\em 7}  & 12 & 7 & $+$ \\
+      \hline
+      {\em 8}  & -7  & -1 & $-$ \\
+      \hline
+      {\em 9}  & -3  & 12 & $+$ \\
+      \hline
+      {\em 10} & 5  & 9 & $+$ \\
+      \hline
+    \end{tabular}
+  \end{center}
+    % {\bf Add indices to the rows of both tables?}
+
+    \begin{table}[!t]
+      {\centering
+        \begin{tabular}{|c|c||c|c|c|c||c|c|c|c|}
+
+          \hline
+          & & \multicolumn{4}{c||}{Hypothesis 1}
+	  & \multicolumn{4}{c|}{Hypothesis 2} \\
+          \cline{3-10}
+          {\em i} & Label & $D_0$ & $f_1 \equiv $ & $f_2 \equiv $ & $h_1\equiv$ & $D_1$ &  $f_1 \equiv $ & $f_2 \equiv $ & $h_2 \equiv $ \\
+          & & & [$x >$\rule[-2pt]{3mm}{0.2pt}$\;$] & [$y >$\rule[-2pt]{3mm}{0.2pt}$\;$] & [$\;$\rule[-2pt]{1cm}{0.2pt}$\;$] & & [$x >$\rule[-2pt]{3mm}{0.2pt}$\;$] & [$y >$\rule[-2pt]{3mm}{0.2pt}$\;$] & [$\;$\rule[-2pt]{1cm}{0.2pt}$\;$] \\
+
+          \tiny{(1)} & \tiny{(2)} & \tiny{(3)} & \tiny{(4)} &  \tiny{(5)} & \tiny{(6)} & \tiny{(7)} & \tiny{(8)} & \tiny{(9)} & \tiny{(10)}\\
+          \hline \hline
+          {\em 1} & $-$ & & & & & & & &  \\
+          \hline
+          {\em 2} & $-$ & & & & & & & &  \\
+          \hline
+          {\em 3} & $+$ & & & & & & & & \\
+          \hline
+          {\em 4} & $-$ & & & & & & & & \\
+          \hline
+          {\em 5} & $-$ & & & & & & & & \\
+          \hline
+          {\em 6} & $+$ & & & & & & & & \\
+          \hline
+          {\em 7} & $+$ & & & & & & & & \\
+          \hline
+          {\em 8} & $-$ & & & & & & & & \\
+          \hline
+          {\em 9} & $+$ & & & & & & & & \\
+          \hline
+          {\em 10} & $-$ & & & & & & & & \\
+          \hline
+        \end{tabular}
+        \caption{Table for Boosting results}\label{table:ltu}}
+    \end{table}
+
+
+  In this problem, you will use Boosting to learn a hidden Boolean function from this set of examples.
+We will use two rounds of AdaBoost to learn a hypothesis for this
+    data set. In each round, AdaBoost chooses a weak learner that minimizes the error $\epsilon$. As weak learners, use hypotheses of the form (a)~$f_1 \equiv [x
+    > \theta_x]$ or (b)~$f_2 \equiv [y > \theta_y]$, for some integers $\theta_x, \theta_y$ (either one of the two forms, not a disjunction of the two). There should be no need to try many values of $\theta_x, \theta_y$;
+    appropriate values should be clear from the data.
+
+
+  \begin{enumerate}
+  \item {\bf [5 points]}  Start the first round with a uniform distribution $D_0$.  Place the value for
+    $D_0$ for each example in the third column of Table~\ref{table:ltu}.
+Write the new representation of the data in terms of the {\em rules of thumb}, $f_1$ and $f_2$, in the fourth and fifth columns of Table~\ref{table:ltu}.
+
+  \item {\bf [5 points]}
+    Find the hypothesis given by the weak learner that minimizes the error
+    $\epsilon$ for that distribution.  Place this hypothesis as the heading to the
+    sixth column of Table~\ref{table:ltu}, and give its prediction for each example in that column.
+
+   \item {\bf [5 points]} Now compute $D_1$ for each example, find the new best weak learners $f_1$ and $f_2$, and select hypothesis that
+    minimizes error on this distribution, placing these values and
+    predictions in the seventh to tenth columns of Table~\ref{table:ltu}.
+
+  \item {\bf [5 points]} Write down the final hypothesis produced by AdaBoost.
+
+\end{enumerate}
+
+\textbf{What to submit:} Fill out Table~\ref{table:ltu} as explained, show computation of $\alpha$ and $D_1(i)$, and give the final hypothesis, $H_{\textit{final}}$.
+
+
+\end{enumerate}
+
+
+
+\end{document}
+

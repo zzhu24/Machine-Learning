@@ -1,0 +1,14 @@
+HW 4 CODE
+
+The following files are inlcuded:
+-NN.py: Contains the neural network implementation
+-NN_functions.py: Contains important functions for the Neural Network (THERE ARE TWO FUNCTIONS THAT MUST BE FILLED IN HERE
+-perceptron.py: Contains the perceptron implementation
+-data_loader.py: Contains the code to load the data
+-data/: Directory containing the data for experimentation
+
+
+-Part1.py: Training with five folds and multiple parameter to tune the parameter with circles
+-Part2.py: Training with five folds and multiple parameter to tune the parameter with mnist
+-Part3.py: Plot the average accuracy of NN or perceptron with circles
+-Part4.py: Plot the average accuracy of NN or perceptron with mnist
